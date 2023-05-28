@@ -1,15 +1,36 @@
 import 'package:flutter/material.dart';
 import 'p21_b_board_menu.dart';
 
-class SetIssueStatus extends StatefulWidget {
-  const SetIssueStatus({super.key});
+class IssueData {
+  final String consumerName;
+  final String consumerAddress;
+  final String issue;
 
-  @override
-  State<SetIssueStatus> createState() => _MyWidgetState();
+  IssueData({
+    required this.consumerName,
+    required this.consumerAddress,
+    required this.issue,
+  });
 }
 
-class _MyWidgetState extends State<SetIssueStatus> {
+class SetIssueStatus extends StatefulWidget {
+  const SetIssueStatus({Key? key});
+
+  @override
+  State<SetIssueStatus> createState() => _SetIssueStatusState();
+}
+
+class _SetIssueStatusState extends State<SetIssueStatus> {
   String? status;
+  bool isImageExpanded = false;
+  String comments = '';
+
+  // Simulating data obtained from the backend
+  IssueData issueData = IssueData(
+    consumerName: 'John Doe',
+    consumerAddress: '123 Main Street',
+    issue: 'Line lying low',
+  );
 
   @override
   Widget build(BuildContext context) {
@@ -50,150 +71,137 @@ class _MyWidgetState extends State<SetIssueStatus> {
             Padding(
               padding: EdgeInsets.fromLTRB(20, 20, 20, 10),
               child: Card(
-                  color: Color(0xFFD9D9D9),
-                  shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(20),
-                      side: BorderSide(color: Colors.black)),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: [
-                      Container(
-                        width: 35,
-                        child: Text('1', style: TextStyle(fontSize: 20)),
+                color: Color(0xFFD9D9D9),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(20),
+                  side: BorderSide(color: Colors.black),
+                ),
+                child: Column(
+                  children: [
+                    ListTile(
+                      title: Text(
+                        'Name: ${issueData.consumerName}',
+                        style: TextStyle(fontSize: 20),
                       ),
-                      Column(
+                      subtitle: Text(
+                        'Address: ${issueData.consumerAddress}',
+                        style: TextStyle(fontSize: 20),
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Text(
+                        'Issue: ${issueData.issue}',
+                        style: TextStyle(fontSize: 20),
+                      ),
+                    ),
+                    GestureDetector(
+                      onTap: () {
+                        setState(() {
+                          isImageExpanded = !isImageExpanded;
+                        });
+                      },
+                      child: AnimatedContainer(
+                        duration: Duration(milliseconds: 300),
+                        height: isImageExpanded ? 400 : 200,
+                        // width: double.infinity,
+                        child: Image.asset(
+                          "images/image1.png",
+                          fit: BoxFit.cover,
+                        ),
+                      ),
+                    ),
+                    Padding(
+                      padding: EdgeInsets.all(8.0),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Container(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Text(
-                              'Name : consumerName \nAddress : consumerAddress \n\t\t................\nIssue : Line lying low',
-                              style: TextStyle(fontSize: 20),
-                              textAlign: TextAlign.start,
-                            ),
+                          Text(
+                            "Resolved?",
+                            style: TextStyle(fontSize: 20),
                           ),
-                          Container(
-                            padding: const EdgeInsets.all(8.0),
-                            // alignment: Alignment.centerLeft,
-                            child: Text(
-                              '\nImage:',
-                              style: TextStyle(fontSize: 20),
-                              textAlign: TextAlign.start,
-                            ),
+                          RadioListTile<String>(
+                            title: Text("YES"),
+                            value: 'yes',
+                            groupValue: status,
+                            onChanged: (value) {
+                              setState(() {
+                                status = value;
+                              });
+                            },
                           ),
-                          Container(
-                            padding: const EdgeInsets.all(3.0),
-                            decoration: BoxDecoration(
-                                border: Border.all(
-                                    width: 1, color: Colors.black26)),
-                            child: GestureDetector(
-                              onTap: () {
-                                // Navigator.push(context, route)
-                              },
-                              child: Image(
-                                image: AssetImage("images/image1.png"),
-                                height: 60,
-                                width: 60,
-                              ),
-                            ),
-                            // child: PhotoView(
-                            //   imageProvider: AssetImage("images/image1.png"),
-                            // ),
+                          RadioListTile<String>(
+                            title: Text("NO"),
+                            value: 'no',
+                            groupValue: status,
+                            onChanged: (value) {
+                              setState(() {
+                                status = value;
+                              });
+                            },
                           ),
-                          Container(
-                              padding: const EdgeInsets.all(8.0),
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text("Resolved ?",
-                                      style: TextStyle(fontSize: 20)),
-                                  Row(
-                                    children: [
-                                      Radio(
-                                        value: 'yes',
-                                        groupValue: status,
-                                        onChanged: (value) {
-                                          setState(() {
-                                            status = value;
-                                          });
-                                        },
-                                      ),
-                                      Text("YES")
-                                    ],
-                                  ),
-                                  Row(
-                                    children: [
-                                      Radio(
-                                        value: 'no',
-                                        groupValue: status,
-                                        onChanged: (String? value) {
-                                          setState(() {
-                                            status = value;
-                                          });
-                                        },
-                                      ),
-                                      Text("NO")
-                                    ],
-                                  ),
-                                  Row(
-                                    children: [
-                                      Radio(
-                                        value: 'processing',
-                                        groupValue: status,
-                                        onChanged: (String? value) {
-                                          setState(() {
-                                            status = value;
-                                          });
-                                        },
-                                      ),
-                                      Text("PROCESSING")
-                                    ],
-                                  )
-                                ],
-                              )),
-                          Container(
-                            child: Padding(
-                              padding: EdgeInsets.all(8.0),
-                              child: Text(
-                                'Add comments:\n_______________________',
-                                style: TextStyle(fontSize: 20),
-                                textAlign: TextAlign.start,
-                              ),
-                            ),
-                          ),
-                          Container(
-                            child: Padding(
-                                padding: EdgeInsets.all(8.0),
-                                child: OutlinedButton(
-                                  onPressed: () {},
-                                  style: ButtonStyle(
-                                      side: MaterialStateProperty.all(
-                                          BorderSide(
-                                              color: Colors.black,
-                                              width: 1.0,
-                                              style: BorderStyle.solid))),
-                                  child: Text(
-                                    "SAVE",
-                                    style: TextStyle(
-                                        fontSize: 20, color: Colors.black),
-                                  ),
-                                )),
+                          RadioListTile<String>(
+                            title: Text("PROCESSING"),
+                            value: 'processing',
+                            groupValue: status,
+                            onChanged: (value) {
+                              setState(() {
+                                status = value;
+                              });
+                            },
                           ),
                         ],
-                      )
-                    ],
-                  )),
+                      ),
+                    ),
+                    Padding(
+                      padding: EdgeInsets.all(8.0),
+                      child: TextField(
+                        onChanged: (value) {
+                          setState(() {
+                            comments = value;
+                          });
+                        },
+                        decoration: InputDecoration(
+                          border: OutlineInputBorder(),
+                          labelText: 'Comments',
+                        ),
+                      ),
+                    ),
+                    Padding(
+                      padding: EdgeInsets.all(8.0),
+                      child: OutlinedButton(
+                        onPressed: () {
+                          // Handle save button press
+                        },
+                        style: ButtonStyle(
+                          side: MaterialStateProperty.all(
+                            BorderSide(
+                              color: Colors.black,
+                              width: 1.0,
+                              style: BorderStyle.solid,
+                            ),
+                          ),
+                        ),
+                        child: Text(
+                          "SAVE",
+                          style: TextStyle(
+                            fontSize: 20,
+                            color: Colors.black,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
             ),
           ],
         ),
         floatingActionButton: FloatingActionButton(
-          backgroundColor: Color(0XFFFFFF00),
           onPressed: () {
             Navigator.pop(context, true);
           },
-          child: Icon(
-            Icons.arrow_back,
-            color: Colors.black,
-          ),
+          child: Icon(Icons.arrow_back),
         ),
       ),
     );
