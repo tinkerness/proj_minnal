@@ -198,10 +198,14 @@ class _SetIssueStatusState extends State<SetIssueStatus> {
           ],
         ),
         floatingActionButton: FloatingActionButton(
+          backgroundColor: Color(0XFFFFFF00),
           onPressed: () {
             Navigator.pop(context, true);
           },
-          child: Icon(Icons.arrow_back),
+          child: Icon(
+            Icons.arrow_back,
+            color: Colors.black,
+          ),
         ),
       ),
     );
