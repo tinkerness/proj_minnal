@@ -27,7 +27,7 @@ class _SetIssueStatusState extends State<SetIssueStatus> {
 
   // Simulating data obtained from the backend
   IssueData issueData = IssueData(
-    consumerName: 'John Doe',
+    consumerName: 'Sita',
     consumerAddress: '123 Main Street',
     issue: 'Line lying low',
   );
