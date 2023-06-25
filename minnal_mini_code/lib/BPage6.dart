@@ -14,6 +14,7 @@ class BPage6 extends StatefulWidget {
 
 class _MyWidgetState extends State<BPage6> {
   List<Map<String, dynamic>> complaints = [];
+  bool loading = true;
 
   @override
   void initState() {
@@ -27,7 +28,7 @@ class _MyWidgetState extends State<BPage6> {
           await FirebaseFirestore.instance
               .collection('Complaints')
               .where('poleNumber', isEqualTo: widget.poleNumber.toString())
-              .get();
+              .where('status', whereIn: ['processing', 'pending']).get();
 
       for (DocumentSnapshot<Map<String, dynamic>> complaintDoc
           in complaintSnapshot.docs) {
@@ -65,7 +66,9 @@ class _MyWidgetState extends State<BPage6> {
         }
       }
 
-      setState(() {});
+      setState(() {
+        loading = false;
+      });
     } catch (e) {
       print('Error fetching complaints: $e');
     }
@@ -114,61 +117,106 @@ class _MyWidgetState extends State<BPage6> {
               'Pole No.: P${widget.poleNumber}',
               style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
             ),
-            ListView.builder(
-              shrinkWrap: true,
-              physics: ClampingScrollPhysics(),
-              itemCount: complaints.length,
-              itemBuilder: (context, index) {
-                Map<String, dynamic> complaint = complaints[index];
-                String name = complaint['name'];
-                String address = complaint['address'];
-                String issue = complaint['issue'];
-
-                return Padding(
-                  padding: const EdgeInsets.fromLTRB(20, 20, 20, 10),
-                  child: Card(
-                    color: Color(0xFFD9D9D9),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(20),
-                      side: BorderSide(color: Colors.black),
+            loading
+                ? Container(
+                    width: 40, // Set the width of the container
+                    height: 40, // Set the height of the container
+                    child: CircularProgressIndicator(
+                      strokeWidth: 4,
+                      color: Color.fromARGB(255, 255, 255, 0),
+                      backgroundColor: Colors.grey,
                     ),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: [
-                        Text(
-                          '${index + 1}',
-                          style: TextStyle(fontSize: 20),
-                        ),
-                        InkWell(
-                          onTap: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(builder: (context) => BPage7()),
-                            );
-                          },
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                'Name: $name\nAddress: $address',
-                                style: TextStyle(fontSize: 20),
-                              ),
-                              Text(
-                                'Issue: $issue',
-                                style: TextStyle(
-                                  fontSize: 20,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                            ],
+                  ) // Show a loading indicator while fetching data
+                : complaints.isEmpty
+                    ? const Padding(
+                        padding: EdgeInsets.fromLTRB(0, 20, 0, 10),
+                        child: Text(
+                          'No complaints!',
+                          style: TextStyle(
+                            fontSize: 25,
+                            fontWeight: FontWeight.bold,
                           ),
-                        )
-                      ],
-                    ),
-                  ),
-                );
-              },
-            ),
+                        ),
+                      )
+                    : ListView.builder(
+                        shrinkWrap: true,
+                        physics: ClampingScrollPhysics(),
+                        itemCount: complaints.length,
+                        itemBuilder: (context, index) {
+                          Map<String, dynamic> complaint = complaints[index];
+                          String name = complaint['name'];
+                          String address = complaint['address'];
+                          String issue = complaint['issue'];
+
+                          return Padding(
+                            padding: const EdgeInsets.fromLTRB(20, 20, 20, 10),
+                            child: Card(
+                              color: Color(0xFFD9D9D9),
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(20),
+                                side: BorderSide(color: Colors.black),
+                              ),
+                              child: Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceEvenly,
+                                children: [
+                                  Text(
+                                    '${index + 1}',
+                                    style: TextStyle(fontSize: 20),
+                                  ),
+                                  InkWell(
+                                    onTap: () async {
+                                      try {
+                                        QuerySnapshot<Map<String, dynamic>>
+                                            complaintSnapshot =
+                                            await FirebaseFirestore.instance
+                                                .collection('Complaints')
+                                                .where('poleNumber',
+                                                    isEqualTo: widget.poleNumber
+                                                        .toString())
+                                                .get();
+
+                                        String complaintDocumentId =
+                                            complaintSnapshot.docs[index].id;
+                                        print(
+                                            'Complaint Document ID: $complaintDocumentId');
+                                        Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                            builder: (context) => BPage7(
+                                              complaintDocumentId:
+                                                  complaintDocumentId,
+                                            ),
+                                          ),
+                                        );
+                                      } catch (e) {
+                                        print('Error fetching complaint: $e');
+                                      }
+                                    },
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Text(
+                                          'Name: $name\nAddress: $address',
+                                          style: TextStyle(fontSize: 20),
+                                        ),
+                                        Text(
+                                          'Issue: $issue',
+                                          style: TextStyle(
+                                            fontSize: 20,
+                                            fontWeight: FontWeight.bold,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  )
+                                ],
+                              ),
+                            ),
+                          );
+                        },
+                      ),
           ],
         ),
       ),
