@@ -1,8 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:minnalmini/BPage9.dart';
+import 'package:image_network/image_network.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 
 class BPage7 extends StatefulWidget {
-  const BPage7({Key? key}) : super(key: key);
+  final String complaintDocumentId;
+
+  const BPage7({Key? key, required this.complaintDocumentId}) : super(key: key);
 
   @override
   _BPage7State createState() => _BPage7State();
@@ -10,6 +15,143 @@ class BPage7 extends StatefulWidget {
 
 class _BPage7State extends State<BPage7> {
   int? selectedRadioValue;
+  String? poleNumber;
+  String? complaintType;
+  String? consumerNumber;
+  String? consumerName;
+  String? consumerAddress;
+  String? status;
+  String? comments;
+  String? imageUrl;
+
+  @override
+  void initState() {
+    super.initState();
+    fetchComplaintDetails();
+  }
+
+  Future<void> fetchComplaintDetails() async {
+    try {
+      DocumentSnapshot<Map<String, dynamic>> complaintSnapshot =
+          await FirebaseFirestore.instance
+              .collection('Complaints')
+              .doc(widget.complaintDocumentId)
+              .get();
+
+      Map<String, dynamic>? complaintData = complaintSnapshot.data();
+      if (complaintData != null) {
+        consumerNumber = complaintData['consumerNumber'];
+        complaintType = complaintData['complaintType'];
+        poleNumber = complaintData['poleNumber'];
+        status = complaintData['status'];
+        comments = complaintData['comments'];
+        // imageUrl = complaintData['imageUrl'];
+        String imagePath = complaintData['imageUrl'];
+        String downloadUrl = await getDownloadUrl(imagePath);
+
+        print(
+            'Consumer Number: $consumerNumber, Complaint Type: $complaintType');
+
+        // Set the selected radio button based on the fetched status
+        if (status == 'pending') {
+          selectedRadioValue = 2;
+        } else if (status == 'resolved') {
+          selectedRadioValue = 1;
+        } else if (status == 'processing') {
+          selectedRadioValue = 3;
+        }
+
+        setState(() {
+          imageUrl = downloadUrl;
+        });
+
+        QuerySnapshot<Map<String, dynamic>> consumerSnapshot =
+            await FirebaseFirestore.instance
+                .collection('consumers')
+                .where('consumerNumber', isEqualTo: consumerNumber)
+                .limit(1)
+                .get();
+
+        if (consumerSnapshot.docs.isNotEmpty) {
+          DocumentSnapshot<Map<String, dynamic>> documentSnapshot =
+              consumerSnapshot.docs.first;
+          Map<String, dynamic>? consumerData = documentSnapshot.data();
+          if (consumerData != null) {
+            String name = consumerData['name'];
+            String address = consumerData['address'];
+
+            print('Name: $name, Address: $address');
+
+            setState(() {
+              this.consumerName = name;
+              this.consumerAddress = address;
+            });
+          }
+        }
+      }
+    } catch (e) {
+      print('Error fetching complaint details: $e');
+    }
+  }
+
+  Future<String> getDownloadUrl(String imagePath) async {
+    Reference ref = FirebaseStorage.instance.ref().child(imagePath);
+    String downloadUrl = await ref.getDownloadURL();
+    return downloadUrl;
+  }
+
+  Widget buildImageWidget() {
+    if (imageUrl != null && imageUrl!.isNotEmpty) {
+      // If imageUrl exists, display the fetched image
+      return Image.network(
+        imageUrl!,
+        width: 200,
+        height: 200,
+        fit: BoxFit.cover,
+      );
+    } else {
+      // If imageUrl is empty or null, display a default image
+      return Image.asset(
+        'images/pic.png',
+        width: 200,
+        height: 200,
+        fit: BoxFit.cover,
+      );
+    }
+  }
+
+  Future<void> updateComplaintDetails() async {
+    try {
+      await FirebaseFirestore.instance
+          .collection('Complaints')
+          .doc(widget.complaintDocumentId)
+          .update({
+        'status': status,
+        'comments': comments,
+      });
+      print('Complaint details updated successfully!');
+
+      showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: Text('Updated'),
+            content: Text('Complaint status updated successfully!'),
+            actions: [
+              TextButton(
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+                child: Text('OK'),
+              ),
+            ],
+          );
+        },
+      );
+    } catch (e) {
+      print('Error updating complaint details: $e');
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -55,7 +197,7 @@ class _BPage7State extends State<BPage7> {
             Padding(
               padding: const EdgeInsets.all(8.0),
               child: Text(
-                'Pole No.  : P1',
+                'Pole No.  : P${poleNumber ?? ''}',
                 style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
               ),
             ),
@@ -79,7 +221,7 @@ class _BPage7State extends State<BPage7> {
                         child: Padding(
                           padding: const EdgeInsets.all(8.0),
                           child: Text(
-                            'Name: Sita',
+                            'Name: $consumerName',
                             style: TextStyle(fontSize: 20, color: Colors.black),
                           ),
                         ),
@@ -92,7 +234,7 @@ class _BPage7State extends State<BPage7> {
                         child: Padding(
                           padding: const EdgeInsets.all(8.0),
                           child: Text(
-                            'Address :',
+                            'Address : $consumerAddress',
                             style: TextStyle(fontSize: 20, color: Colors.black),
                           ),
                         ),
@@ -105,7 +247,7 @@ class _BPage7State extends State<BPage7> {
                         child: Padding(
                           padding: const EdgeInsets.all(8.0),
                           child: Text(
-                            'Issue :',
+                            'Issue : $complaintType',
                             style: TextStyle(fontSize: 20, color: Colors.black),
                           ),
                         ),
@@ -126,16 +268,24 @@ class _BPage7State extends State<BPage7> {
                               width: 2.0,
                             ),
                           ),
-                          child: Image.asset(
-                            'images/pic.png',
-                            width: 200,
-                            height: 200,
-                            fit: BoxFit.cover,
-                          ),
+                          // child: Image.asset(
+                          //   'images/pic.png',
+                          //   width: 200,
+                          //   height: 200,
+                          //   fit: BoxFit.cover,
+                          // ),
+                          // Use the helper method to display the image widget
+                          child: buildImageWidget(),
+                          // child: Image.network(imageUrl, fit: BoxFit.contain),
                         ),
                       ),
                       Column(
                         children: [
+                          Text(
+                            "Resolved?",
+                            style: TextStyle(
+                                fontSize: 23, fontWeight: FontWeight.bold),
+                          ),
                           RadioListTile(
                             title: Text('Yes'),
                             value: 1,
@@ -143,6 +293,7 @@ class _BPage7State extends State<BPage7> {
                             onChanged: (value) {
                               setState(() {
                                 selectedRadioValue = value as int?;
+                                status = 'resolved';
                               });
                             },
                           ),
@@ -153,6 +304,7 @@ class _BPage7State extends State<BPage7> {
                             onChanged: (value) {
                               setState(() {
                                 selectedRadioValue = value as int?;
+                                status = 'pending';
                               });
                             },
                           ),
@@ -163,6 +315,7 @@ class _BPage7State extends State<BPage7> {
                             onChanged: (value) {
                               setState(() {
                                 selectedRadioValue = value as int?;
+                                status = 'processing';
                               });
                             },
                           ),
@@ -171,19 +324,32 @@ class _BPage7State extends State<BPage7> {
                             child: Text(
                               'Add Comments',
                               style: TextStyle(
-                                  fontSize: 25,
+                                  fontSize: 23,
                                   color: Colors.black,
                                   fontWeight: FontWeight.bold),
                             ),
                           ),
                           Padding(
                             padding: const EdgeInsets.all(8.0),
-                            child: TextField(),
+                            // child: TextField(),
+                            child: TextField(
+                              onChanged: (value) {
+                                setState(() {
+                                  comments = value;
+                                });
+                              },
+                              decoration: InputDecoration(
+                                border: OutlineInputBorder(),
+                                labelText: 'Add Comments',
+                              ),
+                            ),
                           ),
                           Padding(
                             padding: const EdgeInsets.all(8.0),
                             child: ElevatedButton(
-                              onPressed: () {},
+                              onPressed: () {
+                                updateComplaintDetails();
+                              },
                               style: ElevatedButton.styleFrom(
                                 backgroundColor:
                                     Color.fromARGB(255, 255, 255, 0),
