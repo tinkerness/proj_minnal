@@ -35,18 +35,20 @@ class _BPage5State extends State<BPage5> {
 
       snapshot.docs.forEach((DocumentSnapshot<Map<String, dynamic>> doc) {
         Map<String, dynamic> data = doc.data()!;
-        // int? poleNumber = int.tryParse(data['pole'] ?? '');
-        int? currentPole = int.tryParse(data['currentPole'] ?? '');
-        int? poleNumberField = int.tryParse(data['poleNumber'] ?? '');
+        String? status = data['status'];
 
-        if (currentPole == 1 || poleNumberField == 1) {
-          countPole1 = (countPole1 ?? 0) + 1;
-        } else if (currentPole == 2 || poleNumberField == 2) {
-          countPole2 = (countPole2 ?? 0) + 1;
-        } else if (currentPole == 3 || poleNumberField == 3) {
-          countPole3 = (countPole3 ?? 0) + 1;
-        } else if (currentPole == 4 || poleNumberField == 4) {
-          countPole4 = (countPole4 ?? 0) + 1;
+        if (status != 'resolved') {
+          int? poleNumberField = int.tryParse(data['poleNumber'] ?? '');
+
+          if (poleNumberField == 1) {
+            countPole1 = (countPole1 ?? 0) + 1;
+          } else if (poleNumberField == 2) {
+            countPole2 = (countPole2 ?? 0) + 1;
+          } else if (poleNumberField == 3) {
+            countPole3 = (countPole3 ?? 0) + 1;
+          } else if (poleNumberField == 4) {
+            countPole4 = (countPole4 ?? 0) + 1;
+          }
         }
       });
 
