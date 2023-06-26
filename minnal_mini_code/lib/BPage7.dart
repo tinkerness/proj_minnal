@@ -45,7 +45,6 @@ class _BPage7State extends State<BPage7> {
         poleNumber = complaintData['poleNumber'];
         status = complaintData['status'];
         comments = complaintData['comments'];
-        // imageUrl = complaintData['imageUrl'];
         String imagePath = complaintData['imageUrl'];
         String downloadUrl = await getDownloadUrl(imagePath);
 
@@ -264,7 +263,7 @@ class _BPage7State extends State<BPage7> {
                           width: 300,
                           decoration: BoxDecoration(
                             border: Border.all(
-                              color: Colors.yellow,
+                              color: Colors.black,
                               width: 2.0,
                             ),
                           ),
