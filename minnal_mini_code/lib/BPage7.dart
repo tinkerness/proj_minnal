@@ -268,15 +268,7 @@ class _BPage7State extends State<BPage7> {
                               width: 2.0,
                             ),
                           ),
-                          // child: Image.asset(
-                          //   'images/pic.png',
-                          //   width: 200,
-                          //   height: 200,
-                          //   fit: BoxFit.cover,
-                          // ),
-                          // Use the helper method to display the image widget
                           child: buildImageWidget(),
-                          // child: Image.network(imageUrl, fit: BoxFit.contain),
                         ),
                       ),
                       Column(
