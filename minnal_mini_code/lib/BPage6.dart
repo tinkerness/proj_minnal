@@ -56,6 +56,7 @@ class _MyWidgetState extends State<BPage6> {
               print('Name: $name, Address: $address, Issue: $issue');
 
               Map<String, dynamic> complaintDetails = {
+                'id': complaintDoc.id,
                 'name': name,
                 'address': address,
                 'issue': issue,
@@ -177,7 +178,7 @@ class _MyWidgetState extends State<BPage6> {
                                                 .get();
 
                                         String complaintDocumentId =
-                                            complaintSnapshot.docs[index].id;
+                                            complaint['id'];
                                         print(
                                             'Complaint Document ID: $complaintDocumentId');
                                         Navigator.push(
