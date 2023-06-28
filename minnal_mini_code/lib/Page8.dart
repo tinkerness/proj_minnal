@@ -4,12 +4,13 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:firebase_storage/firebase_storage.dart';
+import 'package:minnalmini/Page6.dart';
 import 'package:permission_handler/permission_handler.dart';
-
-import 'Page6.dart';
+import 'consumermodel.dart';
 
 class Page8 extends StatefulWidget {
-  const Page8({Key? key}) : super(key: key);
+  final ConsumerModel consumer;
+  const Page8({Key? key, required this.consumer}) : super(key: key);
 
   @override
   State<Page8> createState() => _Page8State();
@@ -37,18 +38,15 @@ class _Page8State extends State<Page8> {
 
   @override
   Widget build(BuildContext context) {
-
-      Future<void> getAccess() async {
-    final access = await [Permission.camera, Permission.storage].request();
-    final cameraStatus = access[Permission.camera];
-    final storageStatus = access[Permission.storage];
-    if (storageStatus != PermissionStatus.granted ||
-        cameraStatus != PermissionStatus.granted) {
+    Future<void> getAccess() async {
+      final access = await [Permission.camera, Permission.storage].request();
+      final cameraStatus = access[Permission.camera];
+      final storageStatus = access[Permission.storage];
+      if (storageStatus != PermissionStatus.granted ||
+          cameraStatus != PermissionStatus.granted) {
         print('error');
+      }
     }
-
-  }
-
 
     final dateTime = DateTime.now();
 
@@ -93,7 +91,8 @@ class _Page8State extends State<Page8> {
             onPressed: () {
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => const Page6()),
+                MaterialPageRoute(
+                    builder: (context) => Page6(consumer: widget.consumer)),
               );
             },
             icon: const Icon(
@@ -133,8 +132,8 @@ class _Page8State extends State<Page8> {
                       'Meter related',
                       'No power supply',
                       'Pole related',
-                      'Transformer related',
-                      'Frequent interruption',
+                      'Trans. related',
+                      'Freq. interruption',
                       'Line related',
                     ].map<DropdownMenuItem<String>>((String value) {
                       return DropdownMenuItem<String>(
@@ -167,14 +166,11 @@ class _Page8State extends State<Page8> {
                   Center(
                     child: ElevatedButton.icon(
                       onPressed: () async {
-
                         getAccess();
 
                         ImagePicker imagePicker = ImagePicker();
-                         file = await imagePicker.pickImage(
+                        file = await imagePicker.pickImage(
                             source: ImageSource.camera);
-
-        
 
                         if (file == null) return;
                       },
@@ -267,7 +263,8 @@ class _Page8State extends State<Page8> {
                             await referenceImageToUpload.getDownloadURL();
                         if (imageUrl.isEmpty) {
                           ScaffoldMessenger.of(context).showSnackBar(
-                            const SnackBar(content: Text('Please upload an image')),
+                            const SnackBar(
+                                content: Text('Please upload an image')),
                           );
                           return;
                         }
@@ -279,6 +276,8 @@ class _Page8State extends State<Page8> {
                           'consumerNumber': consumerNumber,
                           'poleNumber': myPoleno ?? poleNumberController.text,
                           'imageUrl': imageUrl,
+                          'comments': '',
+                          'status': 'pending',
                         }).then((_) {
                           ScaffoldMessenger.of(context).showSnackBar(
                             const SnackBar(content: Text('Complaint added')),
@@ -286,21 +285,22 @@ class _Page8State extends State<Page8> {
                           Navigator.pop(context);
                         }).catchError((error) {
                           ScaffoldMessenger.of(context).showSnackBar(
-                            const SnackBar(content: Text('Failed to add complaint')),
+                            const SnackBar(
+                                content: Text('Failed to add complaint')),
                           );
                           print('Error adding complaint: $error');
                         });
                       },
-                      child: const Text(
-                        'Submit',
-                        style: TextStyle(fontSize: 20),
-                      ),
                       style: ElevatedButton.styleFrom(
                         fixedSize: const Size(150, 50),
+                        backgroundColor: Colors.black,
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(20),
                         ),
-                        primary: Colors.black,
+                      ),
+                      child: const Text(
+                        'Submit',
+                        style: TextStyle(fontSize: 20),
                       ),
                     ),
                   ),

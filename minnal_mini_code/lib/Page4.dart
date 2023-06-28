@@ -5,6 +5,9 @@ import 'package:minnalmini/Page5.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
+import 'consumermodel.dart';
+import 'firebasenotificationservice.dart';
+
 class Consumer extends StatefulWidget {
   const Consumer({Key? key}) : super(key: key);
 
@@ -33,26 +36,32 @@ class _ConsumerState extends State<Consumer> {
         if (snapshot.size > 0) {
           // User exists in Firestore, sign in with Firebase Authentication
           if (snapshot.docs.length == 1) {
-            UserCredential userCredential =
-                await FirebaseAuth.instance.signInWithEmailAndPassword(
-              email: email,
-              password: password,
-            );
+            ConsumerModel consumer = ConsumerModel.fromJson(
+                snapshot.docs.first.data() as Map<String, dynamic>);
+            consumer.id = snapshot.docs.first.id;
+
+            await FirebaseNotificationService()
+                .subscribetoTopic("polenumber${consumer.poleNumber}");
 
             // User signed in successfully, navigate to the next screen
+            // ignore: use_build_context_synchronously
             Navigator.pushReplacement(
               context,
-              MaterialPageRoute(builder: (context) => Page5()),
+              MaterialPageRoute(
+                  builder: (context) => Page5(
+                        consumer: consumer,
+                      )),
             );
           } else {
+            // ignore: use_build_context_synchronously
             showDialog(
               context: context,
               builder: (context) => AlertDialog(
-                title: Text('Login Failed'),
-                content: Text('Invalid email or password.'),
+                title: const Text('Login Failed'),
+                content: const Text('Invalid email or password.'),
                 actions: [
                   TextButton(
-                    child: Text('OK'),
+                    child: const Text('OK'),
                     onPressed: () => Navigator.pop(context),
                   ),
                 ],
@@ -63,11 +72,11 @@ class _ConsumerState extends State<Consumer> {
           showDialog(
             context: context,
             builder: (context) => AlertDialog(
-              title: Text('Login Failed'),
-              content: Text('Invalid email or password.'),
+              title: const Text('Login Failed'),
+              content: const Text('Invalid email or password.'),
               actions: [
                 TextButton(
-                  child: Text('OK'),
+                  child: const Text('OK'),
                   onPressed: () => Navigator.pop(context),
                 ),
               ],
@@ -78,11 +87,11 @@ class _ConsumerState extends State<Consumer> {
         showDialog(
           context: context,
           builder: (context) => AlertDialog(
-            title: Text('Login Failed'),
+            title: const Text('Login Failed'),
             content: Text(e.toString()),
             actions: [
               TextButton(
-                child: Text('OK'),
+                child: const Text('OK'),
                 onPressed: () => Navigator.pop(context),
               ),
             ],
@@ -163,10 +172,10 @@ class _ConsumerState extends State<Consumer> {
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
                           Padding(
-                            padding: EdgeInsets.all(16.0),
+                            padding: const EdgeInsets.all(16.0),
                             child: TextFormField(
                               controller: _emailController,
-                              decoration: InputDecoration(
+                              decoration: const InputDecoration(
                                 labelText: 'Email',
                               ),
                               validator: (value) {
@@ -178,11 +187,11 @@ class _ConsumerState extends State<Consumer> {
                             ),
                           ),
                           Padding(
-                            padding: EdgeInsets.all(16.0),
+                            padding: const EdgeInsets.all(16.0),
                             child: TextFormField(
                               controller: _passwordController,
                               obscureText: true,
-                              decoration: InputDecoration(
+                              decoration: const InputDecoration(
                                 labelText: 'Password',
                               ),
                               validator: (value) {

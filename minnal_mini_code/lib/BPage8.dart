@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:minnalmini/BPage9.dart';
-
 
 class BPage8 extends StatefulWidget {
   const BPage8({Key? key}) : super(key: key);
@@ -14,7 +14,7 @@ class _MyWidgetState extends State<BPage8> {
   bool? isChecked2 = false;
   bool? isChecked3 = false;
   bool? isChecked4 = false;
-  
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -278,31 +278,123 @@ class _MyWidgetState extends State<BPage8> {
               Expanded(
                 child: Align(
                   alignment: FractionalOffset.bottomCenter,
-                  child: TextButton(
-                    style: TextButton.styleFrom(
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(20),
+                  child: Padding(
+                    padding: const EdgeInsets.only(bottom: 40.0),
+                    child: ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        primary: Color(0xFFFFFF00),
+                        padding:
+                            EdgeInsets.symmetric(horizontal: 100, vertical: 20),
                       ),
-                      side: BorderSide(color: Colors.black),
-                      backgroundColor: Color(0xFFFFFF00),
-                      foregroundColor: Colors.black,
-                      padding: EdgeInsets.fromLTRB(40, 20, 40, 20),
-                    ),
-                    onPressed: () {},
-                    child: Text(
-                      'RESOLVE',
-                      style: TextStyle(
-                        fontSize: 24,
-                        fontWeight: FontWeight.w900,
+                      onPressed: () {
+                        List<String> selectedPoles = [];
+
+                        if (isChecked1!) {
+                          selectedPoles.add('1');
+                        }
+                        if (isChecked2!) {
+                          selectedPoles.add('2');
+                        }
+                        if (isChecked3!) {
+                          selectedPoles.add('3');
+                        }
+                        if (isChecked4!) {
+                          selectedPoles.add('4');
+                        }
+
+                        if (selectedPoles.isEmpty) {
+                          showDialog(
+                            context: context,
+                            builder: (BuildContext context) {
+                              return AlertDialog(
+                                title: Text('No Poles Selected'),
+                                content: Text(
+                                  'Please select at least one pole.',
+                                ),
+                                actions: [
+                                  TextButton(
+                                    onPressed: () {
+                                      Navigator.of(context).pop();
+                                    },
+                                    child: Text('OK'),
+                                  ),
+                                ],
+                              );
+                            },
+                          );
+                        } else {
+                          print(selectedPoles);
+                          if (selectedPoles.isNotEmpty) {
+                            FirebaseFirestore.instance
+                                .collection('Complaints')
+                                .get()
+                                .then(
+                              (QuerySnapshot snapshot) {
+                                snapshot.docs.forEach(
+                                  (DocumentSnapshot document) {
+                                    String poleNumber = document['poleNumber'];
+                                    if (selectedPoles.contains(poleNumber)) {
+                                      FirebaseFirestore.instance
+                                          .collection('Complaints')
+                                          .doc(document.id)
+                                          .update({
+                                        'status': 'resolved',
+                                      });
+                                    }
+                                  },
+                                );
+                              },
+                            );
+                            showDialog(
+                              context: context,
+                              builder: (BuildContext context) {
+                                return AlertDialog(
+                                  title: Text('Resolved'),
+                                  content: Text(
+                                    'Selected poles resolved successfully.',
+                                  ),
+                                  actions: [
+                                    TextButton(
+                                      onPressed: () {
+                                        Navigator.of(context).pop();
+                                      },
+                                      child: Text('OK'),
+                                    ),
+                                  ],
+                                );
+                              },
+                            );
+                            setState(() {
+                              isChecked1 = false;
+                              isChecked2 = false;
+                              isChecked3 = false;
+                              isChecked4 = false;
+                            });
+                          }
+                          // Save the selected poles to Firestore or perform any other desired actions
+                          // You can use the 'selectedPoles' list here
+                        }
+                      },
+                      child: Text(
+                        'RESOLVE',
+                        style: TextStyle(
+                          fontSize: 24,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.black,
+                        ),
                       ),
                     ),
                   ),
                 ),
-              )
+              ),
             ],
           ),
         ),
       ),
     );
   }
+}
+
+void main() {
+  runApp(const BPage8());
 }

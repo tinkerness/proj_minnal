@@ -1,21 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:minnalmini/Page1.dart';
 import 'package:minnalmini/Page11.dart';
-import 'package:minnalmini/Page4.dart';
 import 'package:minnalmini/Page5.dart';
 import 'package:minnalmini/Page8.dart';
 import 'package:minnalmini/Page9.dart';
-
-import 'Page7.dart';
+import 'package:minnalmini/Page7.dart';
+import 'consumermodel.dart';
 
 class Page6 extends StatelessWidget {
-  const Page6({Key? key});
+  final ConsumerModel consumer;
+  const Page6({super.key, Key? key_, required this.consumer});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(
+        title: const Text(
           'MENU',
           style: TextStyle(
             color: Color.fromARGB(255, 255, 255, 0),
@@ -24,7 +24,6 @@ class Page6 extends StatelessWidget {
         ),
         centerTitle: true,
         backgroundColor: Colors.black,
-        
       ),
       body: Column(
         children: [
@@ -38,123 +37,141 @@ class Page6 extends StatelessWidget {
                     child: Column(
                       children: [
                         ListTile(
-                          title: Text('Home'),
+                          title: const Text('Home'),
                           textColor: Colors.black,
-                          leading: Icon(Icons.home),
-                          iconColor: Colors.black,
-                          onTap: () {
-                             Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (context) => Page5()),
-                      );
-                          },
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.all(20.0),
-                  child: Card(
-                    color: Colors.white,
-                    child: Column(
-                      children: [
-                        ListTile(
-                          title: Text('Report Issue'),
-                          textColor: Colors.black,
-                          leading: Icon(Icons.report),
-                          iconColor: Colors.black,
-                          onTap: () {
-                             Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (context) => Page8()),
-                      );
-                          },
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.all(20.0),
-                  child: Card(
-                    color: Colors.white,
-                    child: Column(
-                      children: [
-                        ListTile(
-                          title: Text('View Status'),
-                          textColor: Colors.black,
-                          leading: Icon(Icons.remove_red_eye),
-                          iconColor: Colors.black,
-                          onTap: () {
-                             Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (context) => Page9()),
-                      );
-                          },
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.all(20.0),
-                  child: Card(
-                    color: Colors.white,
-                    child: Column(
-                      children: [
-                        ListTile(
-                          title: Text('Notifications'),
-                          textColor: Colors.black,
-                          leading: Icon(Icons.notifications),
-                          iconColor: Colors.black,
-                          onTap: () { Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (context) => Page11()),
-                      );},
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.all(20.0),
-                  child: Card(
-                    color: Colors.white,
-                    child: Column(
-                      children: [
-                        ListTile(
-                          title: Text('Settings'),
-                          textColor: Colors.black,
-                          leading: Icon(Icons.settings),
+                          leading: const Icon(Icons.home),
                           iconColor: Colors.black,
                           onTap: () {
                             Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (context) => Page7()),
-                      );
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => Page5(
+                                        consumer: consumer,
+                                      )),
+                            );
                           },
                         ),
                       ],
                     ),
                   ),
                 ),
-                 Padding(
+                Padding(
                   padding: const EdgeInsets.all(20.0),
                   child: Card(
-                    color: Color.fromARGB(255, 255, 255, 0),
+                    color: Colors.white,
                     child: Column(
                       children: [
                         ListTile(
-                          title: Text('LOGOUT',style: TextStyle(fontWeight: FontWeight.bold),),
+                          title: const Text('Report Issue'),
                           textColor: Colors.black,
-                          leading: Icon(Icons.logout),
+                          leading: const Icon(Icons.report),
                           iconColor: Colors.black,
                           onTap: () {
-                             Navigator.push(
+                            Navigator.push(
                               context,
                               MaterialPageRoute(
-                                builder: (context) =>Login(),
+                                  builder: (context) => Page8(
+                                        consumer: consumer,
+                                      )),
+                            );
+                          },
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(20.0),
+                  child: Card(
+                    color: Colors.white,
+                    child: Column(
+                      children: [
+                        ListTile(
+                          title: const Text('View Status'),
+                          textColor: Colors.black,
+                          leading: const Icon(Icons.remove_red_eye),
+                          iconColor: Colors.black,
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => Page9(
+                                        consumer: consumer,
+                                      )),
+                            );
+                          },
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(20.0),
+                  child: Card(
+                    color: Colors.white,
+                    child: Column(
+                      children: [
+                        ListTile(
+                          title: const Text('Notifications'),
+                          textColor: Colors.black,
+                          leading: const Icon(Icons.notifications),
+                          iconColor: Colors.black,
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => Page11(
+                                        consumer: consumer,
+                                      )),
+                            );
+                          },
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(20.0),
+                  child: Card(
+                    color: Colors.white,
+                    child: Column(
+                      children: [
+                        ListTile(
+                          title: const Text('Settings'),
+                          textColor: Colors.black,
+                          leading: const Icon(Icons.settings),
+                          iconColor: Colors.black,
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => const Page7()),
+                            );
+                          },
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(20.0),
+                  child: Card(
+                    color: const Color.fromARGB(255, 255, 255, 0),
+                    child: Column(
+                      children: [
+                        ListTile(
+                          title: const Text(
+                            'LOGOUT',
+                            style: TextStyle(fontWeight: FontWeight.bold),
+                          ),
+                          textColor: Colors.black,
+                          leading: const Icon(Icons.logout),
+                          iconColor: Colors.black,
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => const Login(),
                               ),
                             );
                           },
@@ -163,12 +180,9 @@ class Page6 extends StatelessWidget {
                     ),
                   ),
                 ),
-                
               ],
-              
             ),
           ),
-         
         ],
       ),
     );

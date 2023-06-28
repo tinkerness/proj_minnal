@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:minnalmini/BPage1.dart';
 import 'package:minnalmini/BPage10.dart';
 import 'package:minnalmini/BPage2.dart';
 import 'package:minnalmini/BPage3.dart';
@@ -9,7 +8,7 @@ import 'package:minnalmini/BPage8.dart';
 import 'package:minnalmini/Page1.dart';
 
 class BPage9 extends StatelessWidget {
-  const BPage9({Key? key});
+  const BPage9({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -27,7 +26,7 @@ class BPage9 extends StatelessWidget {
           centerTitle: true, // Center the title
           backgroundColor: Colors.black,
           leading: IconButton(
-            icon: Icon(Icons.arrow_back),
+            icon: const Icon(Icons.arrow_back),
             onPressed: () {
               Navigator.pop(context);
             },
@@ -38,20 +37,20 @@ class BPage9 extends StatelessWidget {
           child: ListView(
             children: [
               ListTile(
-                title: Text(
+                title: const Text(
                   'Home',
                   style: TextStyle(fontSize: 20),
                 ),
                 onTap: () {
                   Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) => BPage2()),
+                    MaterialPageRoute(builder: (context) => const BPage2()),
                   );
                 },
               ),
-              Divider(color: Colors.black38),
+              const Divider(color: Colors.black38),
               ListTile(
-                title: Text(
+                title: const Text(
                   'View Notifications',
                   style: TextStyle(fontSize: 20),
                 ),
@@ -62,9 +61,9 @@ class BPage9 extends StatelessWidget {
                   );
                 },
               ),
-              Divider(color: Colors.black38),
+              const Divider(color: Colors.black38),
               ListTile(
-                title: Text(
+                title: const Text(
                   'Send Alerts',
                   style: TextStyle(fontSize: 20),
                 ),
@@ -75,60 +74,60 @@ class BPage9 extends StatelessWidget {
                   );
                 },
               ),
-              Divider(color: Colors.black38),
+              const Divider(color: Colors.black38),
               ListTile(
-                title: Text(
+                title: const Text(
                   'View Poles',
                   style: TextStyle(fontSize: 20),
                 ),
                 onTap: () {
                   Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) => BPage5()),
+                    MaterialPageRoute(builder: (context) => const BPage5()),
                   );
                 },
               ),
-              Divider(
+              const Divider(
                 color: Colors.black38,
               ),
               ListTile(
-                title: Text(
+                title: const Text(
                   'Set Status',
                   style: TextStyle(fontSize: 20),
                 ),
                 onTap: () {
                   Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) => BPage8()),
+                    MaterialPageRoute(builder: (context) => const BPage8()),
                   );
                 },
               ),
-              Divider(color: Colors.black38),
+              const Divider(color: Colors.black38),
               ListTile(
-                title: Text(
+                title: const Text(
                   'Settings',
                   style: TextStyle(fontSize: 20),
                 ),
                 onTap: () {
                   Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) => BPage10()),
+                    MaterialPageRoute(builder: (context) => const BPage10()),
                   );
                 },
               ),
-              Divider(color: Colors.black38),
+              const Divider(color: Colors.black38),
               TextButton(
                 style: TextButton.styleFrom(
-                  backgroundColor: Color(0xFFFFFF00),
+                  backgroundColor: const Color(0xFFFFFF00),
                   foregroundColor: Colors.black,
                 ),
                 onPressed: () {
                   Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) => Login()),
+                    MaterialPageRoute(builder: (context) => const Login()),
                   );
                 },
-                child: Text(
+                child: const Text(
                   "LOG OUT",
                   style: TextStyle(
                     fontSize: 24,
@@ -136,7 +135,7 @@ class BPage9 extends StatelessWidget {
                   ),
                 ),
               ),
-              Divider(color: Colors.black38),
+              const Divider(color: Colors.black38),
             ],
           ),
         ),

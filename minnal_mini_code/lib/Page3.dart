@@ -53,21 +53,31 @@ class _VerifyState extends State<Verify> {
   }
 
   final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
-  Future createUser() async {
-    await _firebaseAuth.createUserWithEmailAndPassword(
-        email: _emailController.text, password: _passwordController.text);
-  }
 
-/* Future<bool> checkUserExists(String email) async {
+  Future<void> createUser() async {
     try {
-      List<String> signInMethods =
-          await FirebaseAuth.instance.fetchSignInMethodsForEmail(email);
-      return signInMethods.isNotEmpty;
-    } catch (e) {
-      print('Error checking user existence: $e');
-      return false;
+      await _firebaseAuth.createUserWithEmailAndPassword(
+          email: _emailController.text, password: _passwordController.text);
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => Consumer()),
+      );
+    } catch (error) {
+      showDialog(
+        context: context,
+        builder: (context) => AlertDialog(
+          title: Text('Error'),
+          content: Text('An error occurred while creating the user.'),
+          actions: [
+            TextButton(
+              child: Text('OK'),
+              onPressed: () => Navigator.pop(context),
+            ),
+          ],
+        ),
+      );
     }
-  }*/
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -191,7 +201,7 @@ class _VerifyState extends State<Verify> {
                                 builder: (context) => AlertDialog(
                                   title: Text('Error'),
                                   content: Text(
-                                      'Password must be at least 6 character long.'),
+                                      'Password must be at least 6 characters long.'),
                                   actions: [
                                     TextButton(
                                       child: Text('OK'),
@@ -201,33 +211,8 @@ class _VerifyState extends State<Verify> {
                                 ),
                               );
                             } else {
-                              /*final scaffoldMessenger =
-                                  ScaffoldMessenger.of(context);
-                              scaffoldMessenger.showSnackBar(
-                                SnackBar(
-                                  duration: const Duration(milliseconds: 1000),
-                                  backgroundColor: Colors.transparent,
-                                  elevation: 0,
-                                  content: Container(
-                                      height: 90,
-                                      decoration: BoxDecoration(
-                                          color: const Color.fromARGB(
-                                              55, 255, 255, 255),
-                                          borderRadius:
-                                              BorderRadius.circular(20)),
-                                      child: const Center(
-                                          child: Text(
-                                        'Unable to sign in',
-                                        style: TextStyle(letterSpacing: 5),
-                                      ))),
-                                  behavior: SnackBarBehavior.floating,
-                                ),
-                              );*/
                               _saveConsumerDetails();
-                              createUser().then((_) => Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) => Consumer())));
+                              createUser();
                             }
                           },
                           style: ElevatedButton.styleFrom(
@@ -255,20 +240,20 @@ class _VerifyState extends State<Verify> {
                     ),
                   ),
                 ),
-                Positioned(
-                  top: 16,
-                  left: 16,
-                  child: IconButton(
-                    onPressed: () {
-                      Navigator.pop(context);
-                    },
-                    icon: const Icon(
-                      Icons.arrow_back,
-                      color: Colors.black,
-                    ),
-                  ),
-                ),
               ],
+            ),
+          ),
+          Positioned(
+            top: 16,
+            left: 16,
+            child: IconButton(
+              onPressed: () {
+                Navigator.pop(context);
+              },
+              icon: const Icon(
+                Icons.arrow_back,
+                color: Colors.black,
+              ),
             ),
           ),
         ],
