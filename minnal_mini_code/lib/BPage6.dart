@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:minnalmini/BPage7.dart';
 import 'package:minnalmini/BPage9.dart';
+// import 'package:minnalmini/BPage7 copy.dart';
 
 class BPage6 extends StatefulWidget {
   final int poleNumber;
@@ -168,15 +169,6 @@ class _MyWidgetState extends State<BPage6> {
                                   InkWell(
                                     onTap: () async {
                                       try {
-                                        QuerySnapshot<Map<String, dynamic>>
-                                            complaintSnapshot =
-                                            await FirebaseFirestore.instance
-                                                .collection('Complaints')
-                                                .where('poleNumber',
-                                                    isEqualTo: widget.poleNumber
-                                                        .toString())
-                                                .get();
-
                                         String complaintDocumentId =
                                             complaint['id'];
                                         print(
