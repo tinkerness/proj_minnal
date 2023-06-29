@@ -1,7 +1,7 @@
+//works fine in laptop but doesnt load in mobile app
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:minnalmini/BPage9.dart';
-import 'package:image_network/image_network.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 
 class BPage7 extends StatefulWidget {
@@ -46,6 +46,8 @@ class _BPage7State extends State<BPage7> {
         status = complaintData['status'];
         comments = complaintData['comments'];
         String imagePath = complaintData['imageUrl'];
+        // Add a delay of 2 seconds before loading the image
+        await Future.delayed(Duration(seconds: 2));
         String downloadUrl = await getDownloadUrl(imagePath);
 
         print(
@@ -94,19 +96,26 @@ class _BPage7State extends State<BPage7> {
   }
 
   Future<String> getDownloadUrl(String imagePath) async {
-    Reference ref = FirebaseStorage.instance.ref().child(imagePath);
-    String downloadUrl = await ref.getDownloadURL();
+    String downloadUrl = '';
+    try {
+      Reference ref = FirebaseStorage.instance.ref().child(imagePath);
+      downloadUrl = await ref.getDownloadURL();
+    } catch (e) {
+      print('Error getting download URL: $e');
+    }
+
     return downloadUrl;
   }
 
   Widget buildImageWidget() {
     if (imageUrl != null && imageUrl!.isNotEmpty) {
-      // If imageUrl exists, display the fetched image
-      return Image.network(
-        imageUrl!,
-        width: 200,
-        height: 200,
-        fit: BoxFit.cover,
+      return Container(
+        width: MediaQuery.of(context).size.width * 0.8,
+        height: MediaQuery.of(context).size.height * 0.8,
+        child: Image(
+          image: NetworkImage(imageUrl!),
+          fit: BoxFit.contain,
+        ),
       );
     } else {
       // If imageUrl is empty or null, display a default image
