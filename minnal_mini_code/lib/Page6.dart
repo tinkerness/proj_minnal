@@ -146,7 +146,9 @@ class Page6 extends StatelessWidget {
                             Navigator.push(
                               context,
                               MaterialPageRoute(
-                                  builder: (context) => const Page7()),
+                                  builder: (context) => Page7(
+                                        consumer: consumer,
+                                      )),
                             );
                           },
                         ),
