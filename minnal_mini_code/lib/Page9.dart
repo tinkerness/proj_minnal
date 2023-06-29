@@ -1,3 +1,5 @@
+//view status of complaint
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:minnalmini/Page10.dart';
@@ -239,7 +241,6 @@ class _Page9State extends State<Page9> {
                                               complaint: issueData,
                                             )),
                                   );
-                                  // Handle voltage fluctuation container tap
                                 },
                                 child: Container(
                                   width: double.infinity,
