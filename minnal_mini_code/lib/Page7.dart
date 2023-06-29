@@ -59,7 +59,7 @@ class _Page7State extends State<Page7> {
             DocumentSnapshot firstDocument = documents[0];
             String? consumerno = firstDocument.get('consumerNumber');
             String? poleno = firstDocument.get('poleNumber');
-            String? documentid = firstDocument.id;
+            // String? documentid = firstDocument.id;
 
             return Scaffold(
               appBar: AppBar(
