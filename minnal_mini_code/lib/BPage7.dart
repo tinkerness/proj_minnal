@@ -2,8 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:minnalmini/BPage9.dart';
 import 'package:firebase_storage/firebase_storage.dart';
-import 'dart:io';
-import 'package:network_image/network_image.dart';
 
 class BPage7 extends StatefulWidget {
   final String complaintDocumentId;
@@ -15,7 +13,6 @@ class BPage7 extends StatefulWidget {
 }
 
 class _BPage7State extends State<BPage7> {
-  // final FirebaseStorage storage = FirebaseStorage.instance;
   int? selectedRadioValue;
   String? poleNumber;
   String? complaintType;
@@ -48,12 +45,6 @@ class _BPage7State extends State<BPage7> {
         poleNumber = complaintData['poleNumber'];
         status = complaintData['status'];
         comments = complaintData['comments'];
-        // String imagePath = complaintData['imageUrl'];
-        // String downloadUrl = await getDownloadUrl(imagePath);
-
-        // setState(() {
-        //   imageUrl = downloadUrl;
-        // });
 
         imageUrl = complaintData['imageUrl'];
         await Future.delayed(Duration(seconds: 2));
