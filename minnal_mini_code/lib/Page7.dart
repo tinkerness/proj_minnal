@@ -1,8 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:minnalmini/Page1.dart';
-import 'package:minnalmini/Page4.dart';
+// import 'package:minnalmini/Page1.dart';
+// import 'package:minnalmini/Page4.dart';
 
 class Page7 extends StatefulWidget {
   const Page7({Key? key}) : super(key: key);
@@ -14,20 +14,20 @@ class Page7 extends StatefulWidget {
 class _Page7State extends State<Page7> {
   @override
   Widget build(BuildContext context) {
-    void changePasswordEmail(String newEmail, String newPassword) async {
-      User? user = FirebaseAuth.instance.currentUser;
+    // void changePasswordEmail(String newEmail, String newPassword) async {
+    //   User? user = FirebaseAuth.instance.currentUser;
 
-      try {
-        await user?.updatePassword(newPassword);
-        await user?.updateEmail(newEmail);
-        print('Password changed successfully');
-      } catch (e) {
-        print('Error changing password: $e');
-      }
-    }
+    //   try {
+    //     await user?.updatePassword(newPassword);
+    //     await user?.updateEmail(newEmail);
+    //     print('Password changed successfully');
+    //   } catch (e) {
+    //     print('Error changing password: $e');
+    //   }
+    // }
 
-    TextEditingController mailcontroller = TextEditingController();
-    TextEditingController passwordcontroller = TextEditingController();
+    // TextEditingController mailcontroller = TextEditingController();
+    // TextEditingController passwordcontroller = TextEditingController();
 
     User? user = FirebaseAuth.instance.currentUser;
     String useremail = user!.email.toString();
@@ -181,106 +181,100 @@ class _Page7State extends State<Page7> {
                           ),
                         ),
                       ),
-                      const SizedBox(height: 16),
-                      const SizedBox(height: 16),
-                      Center(
-                        child: ElevatedButton(
-                          onPressed: () {
-                            showDialog(
-                              context: context,
-                              builder: (context) => AlertDialog(
-                                title: Text('update profile'),
-                                content: SizedBox(
-                                  height: 200,
-                                  width: 100,
-                                  child: Column(
-                                    children: [
-                                      const SizedBox(
-                                        height: 5,
-                                      ),
-                                      Padding(
-                                        padding: const EdgeInsets.all(8.0),
-                                        child: TextField(
-                                          controller: mailcontroller,
-                                          decoration: InputDecoration(
-                                              hintText: 'new mail',
-                                              border: OutlineInputBorder(
-                                                  borderRadius:
-                                                      BorderRadius.circular(
-                                                          10))),
-                                        ),
-                                      ),
-                                      const SizedBox(
-                                        height: 5,
-                                      ),
-                                      Padding(
-                                        padding: const EdgeInsets.all(8.0),
-                                        child: TextField(
-                                          controller: passwordcontroller,
-                                          decoration: InputDecoration(
-                                              hintText: 'new password',
-                                              border: OutlineInputBorder(
-                                                  borderRadius:
-                                                      BorderRadius.circular(
-                                                          10))),
-                                        ),
-                                      ),
-                                      const SizedBox(
-                                        height: 5,
-                                      ),
-                                      TextButton(
-                                          child: Text('update'),
-                                          onPressed: () {
-                                            FirebaseFirestore.instance
-                                                .collection('consumers')
-                                                .doc(documentid)
-                                                .update({
-                                              'email': mailcontroller.text,
-                                              'password':
-                                                  passwordcontroller.text
-                                            }).then((value) {
-                                              print(
-                                                  'Field updated successfully');
-                                            }).catchError((error) {
-                                              print(
-                                                  'Error updating field: $error');
-                                            });
+                      // const SizedBox(height: 16),
+                      // const SizedBox(height: 16),
+                      // Center(
+                      //   child: ElevatedButton(
+                      //     onPressed: () {
+                      //       showDialog(
+                      //         context: context,
+                      //         builder: (context) => AlertDialog(
+                      //           title: Text('update profile'),
+                      //           content: SizedBox(
+                      //             height: 200,
+                      //             width: 100,
+                      //             child: Column(
+                      //               children: [
+                      //                 const SizedBox(
+                      //                   height: 5,
+                      //                 ),
+                      //                 Padding(
+                      //                   padding: const EdgeInsets.all(8.0),
+                      //                   child: TextField(
+                      //                     controller: mailcontroller,
+                      //                     decoration: InputDecoration(
+                      //                         hintText: 'new mail',
+                      //                         border: OutlineInputBorder(
+                      //                             borderRadius:
+                      //                                 BorderRadius.circular(10))),
+                      //                   ),
+                      //                 ),
+                      //                 const SizedBox(
+                      //                   height: 5,
+                      //                 ),
+                      //                 Padding(
+                      //                   padding: const EdgeInsets.all(8.0),
+                      //                   child: TextField(
+                      //                     controller: passwordcontroller,
+                      //                     decoration: InputDecoration(
+                      //                         hintText: 'new password',
+                      //                         border: OutlineInputBorder(
+                      //                             borderRadius:
+                      //                                 BorderRadius.circular(10))),
+                      //                   ),
+                      //                 ),
+                      //                 const SizedBox(
+                      //                   height: 5,
+                      //                 ),
+                      //                 TextButton(
+                      //                     child: Text('update'),
+                      //                     onPressed: () {
+                      //                       FirebaseFirestore.instance
+                      //                           .collection('consumers')
+                      //                           .doc(documentid)
+                      //                           .update({
+                      //                         'email': mailcontroller.text,
+                      //                         'password': passwordcontroller.text
+                      //                       }).then((value) {
+                      //                         print('Field updated successfully');
+                      //                       }).catchError((error) {
+                      //                         print('Error updating field: $error');
+                      //                       });
 
-                                            changePasswordEmail(
-                                                mailcontroller.text,
-                                                passwordcontroller.text);
-                                            // Navigator.pop(context);
-                                            Navigator.push(
-                                                context,
-                                                MaterialPageRoute(
-                                                    builder: (context) =>
-                                                        Login()));
-                                          }),
-                                    ],
-                                  ),
-                                ),
-                              ),
-                            );
-                          },
-                          style: ElevatedButton.styleFrom(
-                            minimumSize: const Size(25, 50),
-                            backgroundColor:
-                                const Color.fromARGB(255, 255, 255, 0),
-                            side:
-                                const BorderSide(color: Colors.black, width: 1),
-                            shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(20)),
-                          ),
-                          child: const Text(
-                            "Update",
-                            style: TextStyle(
-                              fontSize: 25,
-                              color: Colors.black,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                        ),
-                      ),
+                      //                       changePasswordEmail(
+                      //                           mailcontroller.text,
+                      //                           passwordcontroller.text);
+                      //                       // Navigator.pop(context);
+                      //                       Navigator.push(
+                      //                           context,
+                      //                           MaterialPageRoute(
+                      //                               builder: (context) =>
+                      //                                   Login()));
+                      //                     }),
+                      //               ],
+                      //             ),
+                      //           ),
+                      //         ),
+                      //       );
+                      //     },
+                      //     style: ElevatedButton.styleFrom(
+                      //       minimumSize: const Size(25, 50),
+                      //       backgroundColor:
+                      //           const Color.fromARGB(255, 255, 255, 0),
+                      //       side: const BorderSide(color: Colors.black, width: 1),
+                      //       shape: RoundedRectangleBorder(
+                      //           borderRadius: BorderRadius.circular(20)),
+                      //     ),
+                      //     child: const Text(
+                      //       "Update",
+                      //       style: TextStyle(
+                      //         fontSize: 25,
+                      //         color: Colors.black,
+                      //         fontWeight: FontWeight.bold,
+                      //       ),
+                      //     ),
+                      //   ),
+                      // ),
                     ],
                   ),
                 ),
@@ -294,7 +288,6 @@ class _Page7State extends State<Page7> {
     );
   }
 }
-
 // import 'package:cloud_firestore/cloud_firestore.dart';
 // import 'package:firebase_auth/firebase_auth.dart';
 // import 'package:flutter/material.dart';

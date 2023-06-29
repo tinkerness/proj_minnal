@@ -22,14 +22,24 @@ class ConsumerModel {
   // to-json
   Map<String, dynamic> toJson() => {
         'id': id,
-        'comments': address,
-        'complaintType': consumerNumber,
-        'consumerNumber': email,
-        'complaintDesc': name,
-        'dateTime': phoneNumber,
-        'ipoleNumberd': password,
-        'status': poleNumber,
+        'address': address,
+        'consumerNumber': consumerNumber,
+        'email': email,
+        'name': name,
+        'phoneNumber': phoneNumber,
+        'password': password,
+        'poleNumber': poleNumber,
       };
+  // Map<String, dynamic> toJson() => {
+  //       'id': id,
+  //       'comments': address,
+  //       'complaintType': consumerNumber,
+  //       'consumerNumber': email,
+  //       'complaintDesc': name,
+  //       'dateTime': phoneNumber,
+  //       'ipoleNumberd': password,
+  //       'status': poleNumber,
+  //     };
   // copy
   factory ConsumerModel.copy(ConsumerModel r) {
     return ConsumerModel.fromJson(r.toJson());

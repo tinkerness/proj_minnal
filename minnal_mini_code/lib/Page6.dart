@@ -9,7 +9,8 @@ import 'consumermodel.dart';
 
 class Page6 extends StatelessWidget {
   final ConsumerModel consumer;
-  const Page6({super.key, Key? key_, required this.consumer});
+  // const Page6({super.key, Key? key_, required this.consumer});
+  const Page6({Key? key, required this.consumer}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
