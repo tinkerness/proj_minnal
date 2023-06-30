@@ -1,7 +1,7 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
+// import 'package:firebase_auth/firebase_auth.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:minnalmini/Page6.dart';
@@ -30,6 +30,13 @@ class _Page8State extends State<Page8> {
   XFile? file;
 
   @override
+  void initState() {
+    super.initState();
+    consumerNumber = widget.consumer.consumerNumber;
+    // myPoleno = widget.consumer.poleNumber;
+  }
+
+  @override
   void dispose() {
     textFieldController.dispose();
     poleNumberController.dispose();
@@ -51,29 +58,29 @@ class _Page8State extends State<Page8> {
     final dateTime = DateTime.now();
 
     final complaintType = selectedType;
-    final complaintDesc = textFieldController.text;
-    CollectionReference consumerRef =
-        FirebaseFirestore.instance.collection('consumers');
-    FirebaseAuth auth = FirebaseAuth.instance;
-    User? user = auth.currentUser;
-    String? userEmail;
+    // final complaintDesc = textFieldController.text;
+    // CollectionReference consumerRef =
+    //     FirebaseFirestore.instance.collection('consumers');
+    // FirebaseAuth auth = FirebaseAuth.instance;
+    // User? user = auth.currentUser;
+    // String? userEmail;
 
-    if (user != null) {
-      userEmail = user.email;
-    }
+    // if (user != null) {
+    //   userEmail = user.email;
+    // }
 
-    consumerRef.where('email', isEqualTo: userEmail).get().then((snapshot) {
-      if (snapshot.docs.isNotEmpty) {
-        setState(() {
-          consumerNumber = snapshot.docs[0]['consumerNumber'];
-          if (checkBoxValue) {
-            myPoleno = snapshot.docs[0]['poleNumber'];
-          } else {
-            myPoleno = null;
-          }
-        });
-      }
-    });
+    // consumerRef.where('email', isEqualTo: userEmail).get().then((snapshot) {
+    //   if (snapshot.docs.isNotEmpty) {
+    //     setState(() {
+    //       consumerNumber = snapshot.docs[0]['consumerNumber'];
+    //       if (checkBoxValue) {
+    //         myPoleno = snapshot.docs[0]['poleNumber'];
+    //       } else {
+    //         myPoleno = null;
+    //       }
+    //     });
+    //   }
+    // });
 
     return Scaffold(
       appBar: AppBar(
@@ -207,16 +214,17 @@ class _Page8State extends State<Page8> {
                             checkBoxValue = newValue ?? false;
 
                             if (checkBoxValue) {
-                              consumerRef
-                                  .where('email', isEqualTo: userEmail)
-                                  .get()
-                                  .then((snapshot) {
-                                if (snapshot.docs.isNotEmpty) {
-                                  setState(() {
-                                    myPoleno = snapshot.docs[0]['poleNumber'];
-                                  });
-                                }
-                              });
+                              // consumerRef
+                              //     .where('email', isEqualTo: userEmail)
+                              //     .get()
+                              //     .then((snapshot) {
+                              //   if (snapshot.docs.isNotEmpty) {
+                              //     setState(() {
+                              //       myPoleno = snapshot.docs[0]['poleNumber'];
+                              //     });
+                              //   }
+                              // });
+                              myPoleno = widget.consumer.poleNumber;
                             } else {
                               myPoleno = null;
                             }
@@ -268,7 +276,7 @@ class _Page8State extends State<Page8> {
                           );
                           return;
                         }
-
+                        final complaintDesc = textFieldController.text;
                         complaintRef.add({
                           'complaintType': complaintType,
                           'complaintDesc': complaintDesc,

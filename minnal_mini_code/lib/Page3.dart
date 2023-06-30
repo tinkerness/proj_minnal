@@ -118,7 +118,7 @@ class _VerifyState extends State<Verify> {
                   height: 20,
                 ),
                 const Text(
-                  "WELCOME <username>",
+                  "WELCOME",
                   style: TextStyle(
                     fontSize: 25,
                     color: Colors.black,

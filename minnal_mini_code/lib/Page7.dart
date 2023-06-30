@@ -14,14 +14,29 @@ class Page7 extends StatefulWidget {
 
 class _Page7State extends State<Page7> {
   late User? user;
-  // late String? useremail = widget.consumer.email;
   late String useremail;
+
+  final TextEditingController mailController = TextEditingController();
+  final TextEditingController passwordController = TextEditingController();
+
   @override
   void initState() {
     super.initState();
     user = FirebaseAuth.instance.currentUser;
-    // useremail = user!.email.toString();
     useremail = widget.consumer.email!;
+    print(user?.email);
+  }
+
+  void changePasswordEmail(String newEmail, String newPassword) async {
+    User? user = FirebaseAuth.instance.currentUser;
+
+    try {
+      await user?.updatePassword(newPassword);
+      await user?.updateEmail(newEmail);
+      print('Password changed successfully');
+    } catch (e) {
+      print('Error changing password: $e');
+    }
   }
 
   @override
@@ -192,6 +207,102 @@ class _Page7State extends State<Page7> {
                         ),
                       ),
                     ),
+                    const SizedBox(height: 16),
+                    // const SizedBox(height: 16),
+                    // Center(
+                    //   child: ElevatedButton(
+                    //     onPressed: () {
+                    //       showDialog(
+                    //         context: context,
+                    //         builder: (context) => AlertDialog(
+                    //           title: Text('Update Profile'),
+                    //           content: SizedBox(
+                    //             height: 200,
+                    //             width: 100,
+                    //             child: Column(
+                    //               children: [
+                    //                 const SizedBox(
+                    //                   height: 5,
+                    //                 ),
+                    //                 Padding(
+                    //                   padding: const EdgeInsets.all(8.0),
+                    //                   child: TextField(
+                    //                     controller: mailController,
+                    //                     decoration: InputDecoration(
+                    //                       hintText: 'New Email',
+                    //                       border: OutlineInputBorder(
+                    //                         borderRadius:
+                    //                             BorderRadius.circular(10),
+                    //                       ),
+                    //                     ),
+                    //                   ),
+                    //                 ),
+                    //                 const SizedBox(
+                    //                   height: 5,
+                    //                 ),
+                    //                 Padding(
+                    //                   padding: const EdgeInsets.all(8.0),
+                    //                   child: TextField(
+                    //                     controller: passwordController,
+                    //                     decoration: InputDecoration(
+                    //                       hintText: 'New Password',
+                    //                       border: OutlineInputBorder(
+                    //                         borderRadius:
+                    //                             BorderRadius.circular(10),
+                    //                       ),
+                    //                     ),
+                    //                   ),
+                    //                 ),
+                    //                 const SizedBox(
+                    //                   height: 5,
+                    //                 ),
+                    //                 TextButton(
+                    //                   child: Text('Update'),
+                    //                   onPressed: () {
+                    //                     FirebaseFirestore.instance
+                    //                         .collection('consumers')
+                    //                         .doc(document.id)
+                    //                         .update({
+                    //                       'email': mailController.text,
+                    //                       'password': passwordController.text,
+                    //                     }).then((value) {
+                    //                       print('Field updated successfully');
+                    //                     }).catchError((error) {
+                    //                       print('Error updating field: $error');
+                    //                     });
+
+                    //                     changePasswordEmail(
+                    //                       mailController.text,
+                    //                       passwordController.text,
+                    //                     );
+
+                    //                     Navigator.pop(context);
+                    //                   },
+                    //                 ),
+                    //               ],
+                    //             ),
+                    //           ),
+                    //         ),
+                    //       );
+                    //     },
+                    //     style: ElevatedButton.styleFrom(
+                    //       minimumSize: const Size(25, 50),
+                    //       backgroundColor:
+                    //           const Color.fromARGB(255, 255, 255, 0),
+                    //       side: const BorderSide(color: Colors.black, width: 1),
+                    //       shape: RoundedRectangleBorder(
+                    //         borderRadius: BorderRadius.circular(20),
+                    //       ),
+                    //     ),
+                    //     child: Text(
+                    //       'Update Profile',
+                    //       style: TextStyle(
+                    //         fontSize: 15,
+                    //         color: Colors.black,
+                    //       ),
+                    //     ),
+                    //   ),
+                    // ),
                   ],
                 ),
               ),

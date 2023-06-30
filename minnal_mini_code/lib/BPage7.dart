@@ -16,6 +16,7 @@ class _BPage7State extends State<BPage7> {
   int? selectedRadioValue;
   String? poleNumber;
   String? complaintType;
+  String? complaintDesc;
   String? consumerNumber;
   String? consumerName;
   String? consumerAddress;
@@ -42,6 +43,7 @@ class _BPage7State extends State<BPage7> {
       if (complaintData != null) {
         consumerNumber = complaintData['consumerNumber'];
         complaintType = complaintData['complaintType'];
+        complaintDesc = complaintData['complaintDesc'];
         poleNumber = complaintData['poleNumber'];
         status = complaintData['status'];
         comments = complaintData['comments'];
@@ -52,7 +54,7 @@ class _BPage7State extends State<BPage7> {
           isLoadingImage = true;
         });
         print(
-            'Consumer Number: $consumerNumber, Complaint Type: $complaintType');
+            'Consumer Number: $consumerNumber, Complaint Type: $complaintType, Complaint Desc: $complaintDesc');
 
         if (status == 'pending') {
           selectedRadioValue = 2;
@@ -230,6 +232,19 @@ class _BPage7State extends State<BPage7> {
                           padding: const EdgeInsets.all(8.0),
                           child: Text(
                             'Issue : $complaintType',
+                            style: TextStyle(fontSize: 20, color: Colors.black),
+                          ),
+                        ),
+                      ),
+                      Container(
+                        height: 80,
+                        width: 299,
+                        color: Color.fromARGB(255, 194, 190,
+                            190), // Set the color for the padding
+                        child: Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Text(
+                            'Desc : $complaintDesc',
                             style: TextStyle(fontSize: 20, color: Colors.black),
                           ),
                         ),

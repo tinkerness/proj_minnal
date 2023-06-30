@@ -56,17 +56,28 @@ class _MyWidgetState extends State<BPage6> {
 
               print('Name: $name, Address: $address, Issue: $issue');
 
+              Timestamp dateTimeTimestamp = complaintData['dateTime'];
+              DateTime dateTime = dateTimeTimestamp.toDate();
+
               Map<String, dynamic> complaintDetails = {
                 'id': complaintDoc.id,
                 'name': name,
                 'address': address,
                 'issue': issue,
+                'dateTime': dateTime,
               };
               complaints.add(complaintDetails);
             }
           }
         }
       }
+
+      // Sort the complaints based on 'dateTime'
+      complaints.sort((a, b) {
+        DateTime dateTimeA = a['dateTime'];
+        DateTime dateTimeB = b['dateTime'];
+        return dateTimeA.compareTo(dateTimeB);
+      });
 
       setState(() {
         loading = false;
