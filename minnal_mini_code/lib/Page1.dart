@@ -51,7 +51,7 @@ class _LoginState extends State<Login> {
               padding: const EdgeInsets.all(25.0),
               child: Center(
                 child: Text(
-                  "CONSUMER",
+                  "Welcome",
                   style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
                 ),
               ),

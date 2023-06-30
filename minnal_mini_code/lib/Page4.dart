@@ -146,7 +146,7 @@ class _ConsumerState extends State<Consumer> {
                   height: 20,
                 ),
                 const Text(
-                  "CONSUMER VERIFICATION",
+                  "CONSUMER",
                   style: TextStyle(
                     fontSize: 25,
                     color: Colors.black,
@@ -202,12 +202,12 @@ class _ConsumerState extends State<Consumer> {
                               },
                             ),
                           ),
-                          TextButton(
-                            onPressed: () {
-                              // Forgot password logic
-                            },
-                            child: const Text("Forgot Password?"),
-                          ),
+                          // TextButton(
+                          //   onPressed: () {
+                          //     // Forgot password logic
+                          //   },
+                          //   child: const Text("Forgot Password?"),
+                          // ),
                           const SizedBox(
                             height: 20,
                           ),

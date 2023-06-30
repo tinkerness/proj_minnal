@@ -50,7 +50,6 @@ class _BPage10State extends State<BPage10> {
             .where('email', isEqualTo: useremail)
             .snapshots(),
         builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
-          // String? boardemail = snapshot.data!.docs[0].get('email');
           String? boardemail = snapshot.data?.docs[0].get('email') as String?;
 
           if (snapshot.connectionState == ConnectionState.waiting) {
@@ -81,7 +80,7 @@ class _BPage10State extends State<BPage10> {
                   Center(
                     child: Container(
                       height: 200,
-                      width: 500,
+                      width: 600,
                       padding: const EdgeInsets.all(16.0),
                       decoration: BoxDecoration(
                         color: Colors.grey[200],
@@ -92,7 +91,7 @@ class _BPage10State extends State<BPage10> {
                         children: [
                           Container(
                               child: SingleChildScrollView(
-                            scrollDirection: Axis.vertical,
+                            scrollDirection: Axis.horizontal,
                             child: Row(
                               children: [
                                 Text(
@@ -249,11 +248,9 @@ class _BPage10State extends State<BPage10> {
                                       Navigator.push(
                                           context,
                                           MaterialPageRoute(
-                                            builder: (context) =>
-                                                BPage1(context: context),
-
-                                            // builder: (context) => BPage1(),
-                                          ));
+                                              builder: (context) => BPage1(
+                                                    context: context,
+                                                  )));
                                     },
                                   ),
                                 ],

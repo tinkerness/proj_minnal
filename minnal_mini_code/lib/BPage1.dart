@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:minnalmini/BPage2.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class BPage1 extends StatelessWidget {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
@@ -16,17 +17,24 @@ class BPage1 extends StatelessWidget {
         final String email = _emailController.text;
         final String password = _passwordController.text;
 
-        // Retrieve email and password values from Firestore
-        QuerySnapshot snapshot =
-            await FirebaseFirestore.instance.collection('board').limit(1).get();
+        // Check if email and password match in Firestore
+        QuerySnapshot snapshot = await FirebaseFirestore.instance
+            .collection('board')
+            .where('email', isEqualTo: email)
+            .where('password', isEqualTo: password)
+            .get();
 
-        if (snapshot.docs.isNotEmpty) {
-          String storedEmail = snapshot.docs[0].get('email');
-          String storedPassword = snapshot.docs[0].get('password');
+        if (snapshot.size > 0) {
+          // User exists in Firestore, sign in with Firebase Authentication
+          //final documentId =snapshot.docs.first.id;
+          if (snapshot.docs.length == 1) {
+            UserCredential userCredential =
+                await FirebaseAuth.instance.signInWithEmailAndPassword(
+              email: email,
+              password: password,
+            );
 
-          // Compare email and password with entered values
-          if (storedEmail == email && storedPassword == password) {
-            // User authenticated, navigate to the next screen
+            // User signed in successfully, navigate to the next screen
             Navigator.pushReplacement(
               context,
               MaterialPageRoute(builder: (context) => BPage2()),
@@ -77,6 +85,12 @@ class BPage1 extends StatelessWidget {
         );
       }
     }
+  }
+
+  final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
+  Future signin() async {
+    await _firebaseAuth.signInWithEmailAndPassword(
+        email: _emailController.text, password: _passwordController.text);
   }
 
   @override
@@ -174,15 +188,15 @@ class BPage1 extends StatelessWidget {
                               },
                             ),
                           ),
-                          const SizedBox(
-                            height: 10,
-                          ),
-                          GestureDetector(
-                            onTap: () {
-                              print("clicked");
-                            },
-                            child: const Text("Forgot Password?"),
-                          ),
+                          // const SizedBox(
+                          //   height: 10,
+                          // ),
+                          // GestureDetector(
+                          //   onTap: () {
+                          //     print("clicked");
+                          //   },
+                          //   child: const Text("Forgot Password?"),
+                          // ),
                           const SizedBox(
                             height: 10,
                           ),
@@ -232,6 +246,9 @@ class BPage1 extends StatelessWidget {
                 color: Colors.black,
               ),
             ),
+          ),
+          const SizedBox(
+            height: 10,
           ),
         ],
       ),
